@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import BlogList from "./BlogList"
+import BlogList from "@pages/BlogList"
 
 const Home: FC = () => {
     return (

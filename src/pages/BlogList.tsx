@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { Link } from "react-router-dom";
-import { CustomMarkdown } from "../common/components/CustomMarkdown";
+import { CustomMarkdown } from "@components/common/CustomMarkdown";
 
 const BlogList: FC = () => {
   const blogs = [
@@ -19,16 +19,15 @@ const BlogList: FC = () => {
   ];
 
   return (
-    <>
-      <h1>Blog List</h1>
+    <div className="blog-list">
       {blogs.map((blog) => (
-        <div key={blog.id}>
+        <div key={blog.id} className="blog-item-card">
           <Link to={`/blog/${blog.id}`}>{blog.title}</Link>
           <img src={blog.thumbnail} alt={blog.title} />
           <CustomMarkdown content={blog.content} />
         </div>
       ))}
-    </>
+    </div>
   )
 }
 

@@ -1,14 +1,15 @@
 import type { FC } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
-import Home from './pages/Home'
-import BlogList from './pages/BlogList'
-import BlogPage from './pages/BlogPage'
-import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import Home from '@pages/Home'
+import BlogList from '@pages/BlogList'
+import BlogPage from '@pages/BlogPage'
+import NavBar from '@components/NavBar'
+import '@styles/App.css'
 
 const App: FC = () => {
   return (
     <>
-      <Link to="/">Unsugar.io</Link>
+      <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/blog" element={<BlogList />} />

@@ -2,12 +2,11 @@ import React from "react";
 import markdownit from 'markdown-it'
 import parse, { type HTMLReactParserOptions } from "html-react-parser";
 import DOMPurify from "dompurify";
-import "./styles.css";
+import "@styles/components/common/CustomMarkdown.css";
 
-interface CustomMarkdownProps {
-  content: string;
-}
-
+/*
+  Convert markdown to HTML
+*/
 const convertMarkdownToHTML = (markdown: string) => {
   const md = markdownit({
     html: false,
@@ -18,26 +17,28 @@ const convertMarkdownToHTML = (markdown: string) => {
   return md.render(markdown);
 }
 
+/*
+  Sanitize HTML
+*/
 const sanitizeHTML = (html: string) => {
   const config = {
-    // TODO: Sanitize HTML, add allowed tags and attributes
-    // ALLOWED_TAGS: [], // only <P> and text nodes
-    // ALLOWED_ATTR: [],
     ALLOWED_URI_REGEXP: /https?:\/\//,
   };
   const purify = DOMPurify.sanitize(html, config);
   return purify;
 }
 
+/*
+  Convert HTML to React
+*/
 const convertHTMLToReact = (html: string) => {
-  const options: HTMLReactParserOptions = {
-    replace: (domNode) => {
-      // TODO: Implement custom markdown to react conversion
-      return null;
-    }
-  };
+  const options: HTMLReactParserOptions = {};
   const parser = parse(html, options);
   return parser;
+}
+
+interface CustomMarkdownProps {
+  content: string;
 }
 
 export const CustomMarkdown: React.FC<CustomMarkdownProps> = ({ content }) => {
