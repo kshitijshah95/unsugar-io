@@ -1,0 +1,125 @@
+.footer {
+  background: linear-gradient(to bottom, #0f172a 0%, #1e293b 100%);
+  color: #e2e8f0;
+  padding: 4rem 0 2rem;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 3rem;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.1);
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.5rem;
+}
+
+.footer-brand .brand-text {
+  color: #f8fafc;
+}
+
+.footer-brand .brand-domain {
+  color: #818cf8;
+}
+
+.footer-tagline {
+  color: #94a3b8;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.footer-heading {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #f8fafc;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-link {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  transition: color 0.2s ease;
+  width: fit-content;
+}
+
+.footer-link:hover {
+  color: #818cf8;
+}
+
+.footer-link:focus {
+  outline: 2px solid #818cf8;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.footer-text {
+  color: #94a3b8;
+  font-size: 0.9375rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+}
+
+.footer-copyright {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .footer {
+    padding: 3rem 0 1.5rem;
+  }
+
+  .footer-container {
+    padding: 0 1.5rem;
+  }
+
+  .footer-content {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .footer-section:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+}
