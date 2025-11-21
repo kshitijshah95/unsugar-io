@@ -162,17 +162,44 @@ const responseErrorInterceptor = async (error: AxiosError): Promise<never> => {
 
   // Handle 401 Unauthorized - Token expired or invalid
   if (error.response?.status === 401) {
-    clearTokens();
+    const isAuthRoute = error.config?.url?.includes('/auth/login') || 
+                        error.config?.url?.includes('/auth/register') ||
+                        error.config?.url?.includes('/auth/refresh');
     
-    // Redirect to login page
-    if (typeof window !== 'undefined' && apiClientConfig.onUnauthorized) {
-      apiClientConfig.onUnauthorized();
+    // Only clear tokens and redirect if NOT on an auth route
+    // (Allow login/register to show their own error messages)
+    if (!isAuthRoute) {
+      clearTokens();
+      
+      // Redirect to login page
+      if (typeof window !== 'undefined' && apiClientConfig.onUnauthorized) {
+        apiClientConfig.onUnauthorized();
+      }
     }
 
+    // Extract error message from response
+    const errorMessage = (error.response?.data as any)?.message || 
+                        (error.response?.data as any)?.error || 
+                        'Authentication failed';
+
     throw new ApiError(
-      'Authentication required',
+      errorMessage,
       401,
       'UNAUTHORIZED',
+      error.response.data
+    );
+  }
+
+  // Handle 400 Bad Request - Validation errors
+  if (error.response?.status === 400) {
+    const errorMessage = (error.response?.data as any)?.message || 
+                        (error.response?.data as any)?.error || 
+                        'Validation failed';
+    
+    throw new ApiError(
+      errorMessage,
+      400,
+      'VALIDATION_ERROR',
       error.response.data
     );
   }
