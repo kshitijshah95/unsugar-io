@@ -30,9 +30,7 @@ export default function Auth() {
         try {
           // Store tokens from OAuth callback
           authService.storeTokensFromOAuth(accessToken, refreshToken);
-          // Fetch and set user data
-          const currentUser = await authService.getCurrentUser();
-          // This will be handled by AuthContext's useEffect on mount
+          // AuthContext's useEffect will load user data on mount
           navigate('/');
         } catch (error) {
           console.error('OAuth callback error:', error);

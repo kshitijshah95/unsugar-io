@@ -96,11 +96,7 @@ export const logout = async (): Promise<void> => {
   } finally {
     // Always clear tokens
     clearTokens();
-    
-    // Optional: Redirect to home
-    if (typeof window !== 'undefined') {
-      window.location.href = '/';
-    }
+    // Note: Navigation is handled by AuthContext to avoid full page refresh
   }
 };
 

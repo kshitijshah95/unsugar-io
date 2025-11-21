@@ -1,5 +1,5 @@
 import { useState, useEffect, type FC } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import '@styles/components/NavBar.css';
 import logo from '@assets/logo.png';
@@ -8,7 +8,13 @@ const NavBar: FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/'); // Navigate without page refresh
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,7 +71,7 @@ const NavBar: FC = () => {
                   <Link to="/profile" className="dropdown-item">
                     Profile
                   </Link>
-                  <button onClick={logout} className="dropdown-item">
+                  <button onClick={handleLogout} className="dropdown-item">
                     Logout
                   </button>
                 </div>
