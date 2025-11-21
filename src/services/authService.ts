@@ -41,16 +41,17 @@ export interface AuthResponse {
  */
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
-    const response = await apiClient.post<AuthResponse>('/api/v1/auth/login', credentials);
+    // apiClient interceptor returns response.data directly
+    const data = await apiClient.post('/api/v1/auth/login', credentials) as AuthResponse;
     
     // Store tokens
     setTokens({
-      accessToken: response.data.accessToken,
-      refreshToken: response.data.refreshToken,
-      expiresIn: response.data.expiresIn,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
+      expiresIn: data.expiresIn,
     });
 
-    return response.data;
+    return data;
   } catch (error) {
     if (error instanceof ApiError) {
       throw error;
@@ -64,16 +65,17 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
  */
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
   try {
-    const response = await apiClient.post<AuthResponse>('/api/v1/auth/register', data);
+    // apiClient interceptor returns response.data directly
+    const responseData = await apiClient.post('/api/v1/auth/register', data) as AuthResponse;
     
     // Store tokens
     setTokens({
-      accessToken: response.data.accessToken,
-      refreshToken: response.data.refreshToken,
-      expiresIn: response.data.expiresIn,
+      accessToken: responseData.accessToken,
+      refreshToken: responseData.refreshToken,
+      expiresIn: responseData.expiresIn,
     });
 
-    return response.data;
+    return responseData;
   } catch (error) {
     if (error instanceof ApiError) {
       throw error;
@@ -113,14 +115,15 @@ export const refreshAccessToken = async (): Promise<TokenData> => {
   }
 
   try {
-    const response = await apiClient.post<AuthResponse>('/api/v1/auth/refresh', {
+    // apiClient interceptor returns response.data directly
+    const data = await apiClient.post('/api/v1/auth/refresh', {
       refreshToken,
-    });
+    }) as AuthResponse;
 
     const tokenData: TokenData = {
-      accessToken: response.data.accessToken,
-      refreshToken: response.data.refreshToken,
-      expiresIn: response.data.expiresIn,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
+      expiresIn: data.expiresIn,
     };
 
     setTokens(tokenData);
@@ -139,8 +142,9 @@ export const refreshAccessToken = async (): Promise<TokenData> => {
  */
 export const getCurrentUser = async (): Promise<User> => {
   try {
-    const response = await apiClient.get<{ user: User }>('/api/v1/auth/me');
-    return response.data.user;
+    // apiClient interceptor returns response.data directly
+    const data = await apiClient.get('/api/v1/auth/me') as { user: User };
+    return data.user;
   } catch (error) {
     if (error instanceof ApiError) {
       throw error;
@@ -161,8 +165,9 @@ export const checkAuth = (): boolean => {
  */
 export const updateProfile = async (data: Partial<User>): Promise<User> => {
   try {
-    const response = await apiClient.patch<{ user: User }>('/api/v1/auth/profile', data);
-    return response.data.user;
+    // apiClient interceptor returns response.data directly
+    const responseData = await apiClient.patch('/api/v1/auth/profile', data) as { user: User };
+    return responseData.user;
   } catch (error) {
     if (error instanceof ApiError) {
       throw error;

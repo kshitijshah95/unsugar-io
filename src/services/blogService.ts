@@ -17,11 +17,12 @@ export const blogService = {
     order?: 'asc' | 'desc';
   }): Promise<Blog[]> {
     try {
-      const response: BlogsResponse = await apiClient.get(API_ENDPOINTS.blogs, {
+      // apiClient interceptor returns response.data directly
+      const data = await apiClient.get(API_ENDPOINTS.blogs, {
         params,
-      });
+      }) as BlogsResponse;
       
-      return response.data;
+      return data.data;
     } catch (error) {
       logger.error('Error fetching blogs', error);
       if (error instanceof ApiError) {
@@ -36,8 +37,9 @@ export const blogService = {
    */
   async getBlogById(id: string): Promise<Blog> {
     try {
-      const response: BlogResponse = await apiClient.get(API_ENDPOINTS.blogById(id));
-      return response.data;
+      // apiClient interceptor returns response.data directly
+      const data = await apiClient.get(API_ENDPOINTS.blogById(id)) as BlogResponse;
+      return data.data;
     } catch (error) {
       logger.error('Error fetching blog by ID', error, { id });
       if (error instanceof ApiError) {
@@ -52,8 +54,9 @@ export const blogService = {
    */
   async getBlogBySlug(slug: string): Promise<Blog> {
     try {
-      const response: BlogResponse = await apiClient.get(API_ENDPOINTS.blogBySlug(slug));
-      return response.data;
+      // apiClient interceptor returns response.data directly
+      const data = await apiClient.get(API_ENDPOINTS.blogBySlug(slug)) as BlogResponse;
+      return data.data;
     } catch (error) {
       logger.error('Error fetching blog by slug', error, { slug });
       if (error instanceof ApiError) {
@@ -68,8 +71,9 @@ export const blogService = {
    */
   async getAllTags(): Promise<string[]> {
     try {
-      const response: { success: boolean; data: string[] } = await apiClient.get(API_ENDPOINTS.allTags);
-      return response.data;
+      // apiClient interceptor returns response.data directly
+      const data = await apiClient.get(API_ENDPOINTS.allTags) as { success: boolean; data: string[] };
+      return data.data;
     } catch (error) {
       logger.error('Error fetching tags', error);
       if (error instanceof ApiError) {
