@@ -7,23 +7,28 @@ import Auth from '@pages/Auth'
 import Profile from '@pages/Profile'
 import NavBar from '@components/NavBar'
 import Footer from '@components/Footer'
+import ErrorBoundary from '@components/ErrorBoundary'
+import { NotFoundError } from '@components/ErrorFallback'
 import '@styles/App.css'
 
 const App: FC = () => {
   return (
-    <>
+    <ErrorBoundary>
       <NavBar />
       <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/blog" element={<BlogList />} />
-          <Route path="/blog/:id" element={<BlogPage />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/profile" element={<Profile />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/blog" element={<BlogList />} />
+            <Route path="/blog/:id" element={<BlogPage />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<NotFoundError />} />
+          </Routes>
+        </ErrorBoundary>
       </main>
       <Footer />
-    </>
+    </ErrorBoundary>
   );
 };
 
