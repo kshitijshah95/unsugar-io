@@ -3,8 +3,6 @@
  * Provides environment-aware logging with future support for error tracking services
  */
 
-type LogLevel = 'info' | 'warn' | 'error' | 'debug';
-
 interface LogContext {
   [key: string]: unknown;
 }
