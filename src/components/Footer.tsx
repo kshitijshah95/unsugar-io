@@ -40,7 +40,7 @@ const Footer: FC = () => {
             <h3 className="footer-heading">Connect</h3>
             <div className="footer-links">
               <a 
-                href="https://github.com" 
+                href="https://github.com/kshitijshah95" 
                 className="footer-link"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -48,7 +48,7 @@ const Footer: FC = () => {
                 GitHub
               </a>
               <a 
-                href="https://twitter.com" 
+                href="https://x.com/bentador95" 
                 className="footer-link"
                 target="_blank"
                 rel="noopener noreferrer"
