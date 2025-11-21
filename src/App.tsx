@@ -4,6 +4,7 @@ import Home from '@pages/Home'
 import BlogList from '@pages/BlogList'
 import BlogPage from '@pages/BlogPage'
 import Auth from '@pages/Auth'
+import AuthCallback from '@pages/AuthCallback'
 import Profile from '@pages/Profile'
 import NavBar from '@components/NavBar'
 import Footer from '@components/Footer'
@@ -22,6 +23,7 @@ const App: FC = () => {
             <Route path="/blog" element={<BlogList />} />
             <Route path="/blog/:id" element={<BlogPage />} />
             <Route path="/auth" element={<Auth />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="*" element={<NotFoundError />} />
           </Routes>

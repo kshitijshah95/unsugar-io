@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { authService } from '@/services/authService';
 import { ApiError } from '@/lib/apiClient';
 import { features, isAnySSOEnabled } from '@/config/features';
 import '@/styles/pages/Auth.css';
@@ -17,30 +16,7 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { login, register } = useAuth();
-
-  // Handle OAuth callback
-  useState(() => {
-    const handleOAuthCallback = async () => {
-      const accessToken = searchParams.get('accessToken');
-      const refreshToken = searchParams.get('refreshToken');
-      
-      if (accessToken && refreshToken) {
-        try {
-          // Store tokens from OAuth callback
-          authService.storeTokensFromOAuth(accessToken, refreshToken);
-          // AuthContext's useEffect will load user data on mount
-          navigate('/');
-        } catch (error) {
-          console.error('OAuth callback error:', error);
-          navigate('/auth');
-        }
-      }
-    };
-    
-    handleOAuthCallback();
-  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,12 +60,19 @@ export default function Auth() {
               : 'Join to save your reading list'}
           </p>
 
-          {error && <div className="auth-error">{error}</div>}
+          {error && (
+            <div className="auth-error" role="alert" aria-live="polite">
+              {error}
+            </div>
+          )}
 
-          <form onSubmit={handleSubmit} className="auth-form">
+          <form onSubmit={handleSubmit} className="auth-form" aria-label={isLogin ? 'Sign in form' : 'Sign up form'}>
             {!isLogin && (
               <div className="form-group">
-                <label htmlFor="name">Name</label>
+                <label htmlFor="name">
+                  Name
+                  <span className="required" aria-label="required">*</span>
+                </label>
                 <input
                   id="name"
                   type="text"
@@ -97,12 +80,18 @@ export default function Auth() {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
                   required={!isLogin}
+                  aria-required={!isLogin}
+                  aria-describedby={error && !isLogin ? "name-error" : undefined}
+                  autoComplete="name"
                 />
               </div>
             )}
 
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">
+                Email
+                <span className="required" aria-label="required">*</span>
+              </label>
               <input
                 id="email"
                 type="email"
@@ -110,11 +99,17 @@ export default function Auth() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 required
+                aria-required="true"
+                aria-describedby={error ? "email-error" : undefined}
+                autoComplete="email"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">
+                Password
+                <span className="required" aria-label="required">*</span>
+              </label>
               <input
                 id="password"
                 type="password"
@@ -122,16 +117,38 @@ export default function Auth() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                minLength={8}
+                aria-required="true"
+                minLength={isLogin ? 8 : 12}
+                aria-describedby={error ? "password-error" : "password-hint"}
+                autoComplete={isLogin ? "current-password" : "new-password"}
               />
+              {!isLogin && (
+                <small id="password-hint" className="form-hint">
+                  At least 12 characters with uppercase, lowercase, number, and special character
+                </small>
+              )}
             </div>
 
             <button 
               type="submit" 
               className="btn-primary" 
               disabled={loading}
+              aria-busy={loading}
+              aria-label={loading ? 'Submitting...' : (isLogin ? 'Sign in to your account' : 'Create new account')}
             >
-              {loading ? 'Please wait...' : (isLogin ? 'Sign In' : 'Sign Up')}
+              {loading && (
+                <span className="spinner" aria-hidden="true" style={{
+                  display: 'inline-block',
+                  width: '14px',
+                  height: '14px',
+                  border: '2px solid #ffffff40',
+                  borderTopColor: '#ffffff',
+                  borderRadius: '50%',
+                  animation: 'spin 0.6s linear infinite',
+                  marginRight: '8px'
+                }} />
+              )}
+              {loading ? 'Submitting...' : (isLogin ? 'Sign In' : 'Sign Up')}
             </button>
           </form>
 
