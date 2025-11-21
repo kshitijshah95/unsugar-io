@@ -20,10 +20,13 @@ export interface RegisterData {
 }
 
 export interface User {
-  id: string;
+  _id: string;
+  id?: string; // For backward compatibility
   email: string;
   name: string;
+  avatar?: string;
   role?: string;
+  isVerified?: boolean;
 }
 
 export interface AuthResponse {
@@ -168,6 +171,17 @@ export const updateProfile = async (data: Partial<User>): Promise<User> => {
   }
 };
 
+/**
+ * Store tokens from OAuth callback
+ */
+export const storeTokensFromOAuth = (accessToken: string, refreshToken: string): void => {
+  setTokens({
+    accessToken,
+    refreshToken,
+    expiresIn: 900, // 15 minutes default
+  });
+};
+
 export const authService = {
   login,
   register,
@@ -176,6 +190,7 @@ export const authService = {
   getCurrentUser,
   checkAuth,
   updateProfile,
+  storeTokensFromOAuth,
 };
 
 export default authService;
