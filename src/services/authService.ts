@@ -89,12 +89,18 @@ export const register = async (data: RegisterData): Promise<AuthResponse> => {
  */
 export const logout = async (): Promise<void> => {
   try {
-    // Optional: Call backend logout endpoint
-    await apiClient.post('/api/v1/auth/logout');
+    // Get refresh token to invalidate it on backend
+    const refreshToken = getRefreshToken();
+    
+    // Call backend logout endpoint to invalidate refresh token
+    if (refreshToken) {
+      await apiClient.post('/api/v1/auth/logout', { refreshToken });
+    }
   } catch (error) {
+    // Log error but don't throw - logout should always succeed on client
     logger.error('Logout error', error);
   } finally {
-    // Always clear tokens
+    // Always clear tokens from client
     clearTokens();
     // Note: Navigation is handled by AuthContext to avoid full page refresh
   }
