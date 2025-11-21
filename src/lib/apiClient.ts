@@ -27,9 +27,9 @@ export interface ApiClientConfig {
 // Default configuration
 let apiClientConfig: ApiClientConfig = {
   onUnauthorized: () => {
-    // Default: redirect to login
+    // Default: redirect to auth page
     if (typeof window !== 'undefined') {
-      window.location.href = '/login';
+      window.location.href = '/auth';
     }
   },
   onForbidden: () => {
