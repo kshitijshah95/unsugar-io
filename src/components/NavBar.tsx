@@ -1,6 +1,7 @@
 import { useState, useEffect, type FC } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '@styles/components/NavBar.css';
+import logo from '@assets/logo.png';
 
 const NavBar: FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,8 +21,7 @@ const NavBar: FC = () => {
     <header className={`nav-header ${isScrolled ? 'scrolled' : ''}`}>
       <nav className="nav-container">
         <Link to="/" className="nav-brand">
-          <span className="brand-text">Unsugar</span>
-          <span className="brand-domain">.io</span>
+          <img src={logo} alt="Unsugar Logo" className="nav-logo" />
         </Link>
         <div className="nav-links">
           <Link 

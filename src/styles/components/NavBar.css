@@ -31,7 +31,18 @@
   letter-spacing: -0.025em;
   transition: all 0.2s ease;
   display: flex;
-  align-items: baseline;
+  align-items: center;
+}
+
+.nav-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  transition: all 0.2s ease;
+}
+
+.nav-header.scrolled .nav-logo {
+  height: 32px;
 }
 
 .brand-text {
@@ -48,9 +59,11 @@
 }
 
 .nav-brand:focus {
-  outline: 2px solid #6366f1;
-  outline-offset: 4px;
-  border-radius: 4px;
+  outline: none;
+}
+
+.nav-brand:focus-visible {
+  outline: none;
 }
 
 .nav-links {
@@ -96,9 +109,11 @@
 }
 
 .nav-link:focus {
-  outline: 2px solid #6366f1;
-  outline-offset: 4px;
-  border-radius: 4px;
+  outline: none;
+}
+
+.nav-link:focus-visible {
+  outline: none;
 }
 
 /* Responsive */
@@ -109,6 +124,14 @@
 
   .nav-brand {
     font-size: 1.5rem;
+  }
+
+  .nav-logo {
+    height: 32px;
+  }
+
+  .nav-header.scrolled .nav-logo {
+    height: 28px;
   }
 
   .nav-links {
