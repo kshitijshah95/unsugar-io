@@ -41,7 +41,7 @@ export interface AuthResponse {
  */
 export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
-    const response = await apiClient.post<AuthResponse>('/auth/login', credentials);
+    const response = await apiClient.post<AuthResponse>('/api/v1/auth/login', credentials);
     
     // Store tokens
     setTokens({
@@ -64,7 +64,7 @@ export const login = async (credentials: LoginCredentials): Promise<AuthResponse
  */
 export const register = async (data: RegisterData): Promise<AuthResponse> => {
   try {
-    const response = await apiClient.post<AuthResponse>('/auth/register', data);
+    const response = await apiClient.post<AuthResponse>('/api/v1/auth/register', data);
     
     // Store tokens
     setTokens({
@@ -88,7 +88,7 @@ export const register = async (data: RegisterData): Promise<AuthResponse> => {
 export const logout = async (): Promise<void> => {
   try {
     // Optional: Call backend logout endpoint
-    await apiClient.post('/auth/logout');
+    await apiClient.post('/api/v1/auth/logout');
   } catch (error) {
     logger.error('Logout error', error);
   } finally {
@@ -113,7 +113,7 @@ export const refreshAccessToken = async (): Promise<TokenData> => {
   }
 
   try {
-    const response = await apiClient.post<AuthResponse>('/auth/refresh', {
+    const response = await apiClient.post<AuthResponse>('/api/v1/auth/refresh', {
       refreshToken,
     });
 
@@ -139,7 +139,7 @@ export const refreshAccessToken = async (): Promise<TokenData> => {
  */
 export const getCurrentUser = async (): Promise<User> => {
   try {
-    const response = await apiClient.get<{ user: User }>('/auth/me');
+    const response = await apiClient.get<{ user: User }>('/api/v1/auth/me');
     return response.data.user;
   } catch (error) {
     if (error instanceof ApiError) {
@@ -161,7 +161,7 @@ export const checkAuth = (): boolean => {
  */
 export const updateProfile = async (data: Partial<User>): Promise<User> => {
   try {
-    const response = await apiClient.patch<{ user: User }>('/auth/profile', data);
+    const response = await apiClient.patch<{ user: User }>('/api/v1/auth/profile', data);
     return response.data.user;
   } catch (error) {
     if (error instanceof ApiError) {
