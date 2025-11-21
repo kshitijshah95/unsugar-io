@@ -18,18 +18,30 @@ export default function Auth() {
   
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { login } = useAuth();
+  const { login, register } = useAuth();
 
   // Handle OAuth callback
   useState(() => {
-    const accessToken = searchParams.get('accessToken');
-    const refreshToken = searchParams.get('refreshToken');
+    const handleOAuthCallback = async () => {
+      const accessToken = searchParams.get('accessToken');
+      const refreshToken = searchParams.get('refreshToken');
+      
+      if (accessToken && refreshToken) {
+        try {
+          // Store tokens from OAuth callback
+          authService.storeTokensFromOAuth(accessToken, refreshToken);
+          // Fetch and set user data
+          const currentUser = await authService.getCurrentUser();
+          // This will be handled by AuthContext's useEffect on mount
+          navigate('/');
+        } catch (error) {
+          console.error('OAuth callback error:', error);
+          navigate('/auth');
+        }
+      }
+    };
     
-    if (accessToken && refreshToken) {
-      // Store tokens from OAuth callback
-      authService.storeTokensFromOAuth(accessToken, refreshToken);
-      navigate('/');
-    }
+    handleOAuthCallback();
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -44,7 +56,7 @@ export default function Auth() {
         navigate('/');
       } else {
         // Register
-        await authService.register({ email, password, name });
+        await register(email, password, name);
         navigate('/');
       }
     } catch (err) {
