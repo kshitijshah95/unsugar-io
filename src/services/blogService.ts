@@ -1,5 +1,7 @@
+import apiClient, { ApiError } from '@/lib/apiClient';
 import { API_ENDPOINTS } from '@/config/api';
 import type { Blog, BlogsResponse, BlogResponse } from '@/types/blog';
+import { logger } from '@/utils/logger';
 
 export const blogService = {
   /**
@@ -9,27 +11,23 @@ export const blogService = {
     tag?: string;
     author?: string;
     search?: string;
+    page?: number;
+    limit?: number;
+    sort?: string;
+    order?: 'asc' | 'desc';
   }): Promise<Blog[]> {
     try {
-      const queryParams = new URLSearchParams();
-      if (params?.tag) queryParams.append('tag', params.tag);
-      if (params?.author) queryParams.append('author', params.author);
-      if (params?.search) queryParams.append('search', params.search);
-
-      const url = queryParams.toString()
-        ? `${API_ENDPOINTS.blogs}?${queryParams}`
-        : API_ENDPOINTS.blogs;
-
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error('Failed to fetch blogs');
-      }
-
-      const result: BlogsResponse = await response.json();
-      return result.data;
+      const response: BlogsResponse = await apiClient.get(API_ENDPOINTS.blogs, {
+        params,
+      });
+      
+      return response.data;
     } catch (error) {
-      console.error('Error fetching blogs:', error);
-      throw error;
+      logger.error('Error fetching blogs', error);
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      throw new ApiError('Failed to fetch blogs', undefined, 'FETCH_BLOGS_ERROR');
     }
   },
 
@@ -38,16 +36,14 @@ export const blogService = {
    */
   async getBlogById(id: string): Promise<Blog> {
     try {
-      const response = await fetch(API_ENDPOINTS.blogById(id));
-      if (!response.ok) {
-        throw new Error('Blog not found');
-      }
-
-      const result: BlogResponse = await response.json();
-      return result.data;
+      const response: BlogResponse = await apiClient.get(API_ENDPOINTS.blogById(id));
+      return response.data;
     } catch (error) {
-      console.error('Error fetching blog:', error);
-      throw error;
+      logger.error('Error fetching blog by ID', error, { id });
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      throw new ApiError('Blog not found', 404, 'BLOG_NOT_FOUND');
     }
   },
 
@@ -56,16 +52,14 @@ export const blogService = {
    */
   async getBlogBySlug(slug: string): Promise<Blog> {
     try {
-      const response = await fetch(API_ENDPOINTS.blogBySlug(slug));
-      if (!response.ok) {
-        throw new Error('Blog not found');
-      }
-
-      const result: BlogResponse = await response.json();
-      return result.data;
+      const response: BlogResponse = await apiClient.get(API_ENDPOINTS.blogBySlug(slug));
+      return response.data;
     } catch (error) {
-      console.error('Error fetching blog:', error);
-      throw error;
+      logger.error('Error fetching blog by slug', error, { slug });
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      throw new ApiError('Blog not found', 404, 'BLOG_NOT_FOUND');
     }
   },
 
@@ -74,16 +68,14 @@ export const blogService = {
    */
   async getAllTags(): Promise<string[]> {
     try {
-      const response = await fetch(API_ENDPOINTS.allTags);
-      if (!response.ok) {
-        throw new Error('Failed to fetch tags');
-      }
-
-      const result = await response.json();
-      return result.data;
+      const response: { success: boolean; data: string[] } = await apiClient.get(API_ENDPOINTS.allTags);
+      return response.data;
     } catch (error) {
-      console.error('Error fetching tags:', error);
-      throw error;
+      logger.error('Error fetching tags', error);
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      throw new ApiError('Failed to fetch tags', undefined, 'FETCH_TAGS_ERROR');
     }
   },
 };
