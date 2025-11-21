@@ -18,6 +18,12 @@ export default function Auth() {
   const navigate = useNavigate();
   const { login, register } = useAuth();
 
+  // Clear error when switching between login/register
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
+    setError('');
+  };
+
   const validatePassword = (pwd: string): string | null => {
     if (pwd.length < 12) {
       return 'Password must be at least 12 characters';
@@ -237,11 +243,8 @@ export default function Auth() {
           <div className="auth-toggle">
             {isLogin ? "Don't have an account? " : 'Already have an account? '}
             <button 
-              onClick={() => {
-                setIsLogin(!isLogin);
-                setError('');
-              }}
               type="button"
+              onClick={toggleMode}
             >
               {isLogin ? 'Sign Up' : 'Sign In'}
             </button>
